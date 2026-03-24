@@ -39,7 +39,7 @@ function InjurySection({ data, onUpdate }) {
     };
 
     return (
-        <View style={{ marginTop: 50, marginRight: 15 }}>
+        <View>
             <Text style={styles.title}>Tipo de Lesión</Text>
 
             <View style={styles.options}>
@@ -86,87 +86,83 @@ function InjurySection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 12,
     },
 
     options: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        marginLeft: 10,
-        rowGap: 20,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        rowGap: 10,
         columnGap: 10,
-        marginTop: 15,
-        justifyContent: "center"
+        justifyContent: 'flex-start',
     },
 
     lesion: {
-        borderRadius: 30,
+        borderRadius: 20,
         backgroundColor: COLORS.BACKGROUND,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         paddingVertical: 8,
-        paddingHorizontal: 20,
-        minWidth: 90,
-        maxWidth: 120,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        height: 50,
+        paddingHorizontal: 16,
+        minWidth: 80,
+        maxWidth: 130,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
+        height: 40,
     },
 
     text: {
         fontSize: 12,
         color: COLORS.TEXT,
-        fontWeight: "600"
+        fontWeight: '500',
     },
 
     buttonPressed: {
-        backgroundColor: COLORS.SELECTED
+        backgroundColor: COLORS.SELECTED,
+        borderColor: COLORS.SELECTED,
     },
 
     textOnPress: {
-        color: COLORS.BACKGROUND
+        color: COLORS.BACKGROUND,
     },
 
     other: {
         backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 25,
-        marginTop: 20,
-        paddingHorizontal: 20,
-        fontSize: 18,
-        height: 50,
-        padding: 15,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
+        borderRadius: 10,
+        marginTop: 12,
+        paddingHorizontal: 14,
+        fontSize: 15,
+        height: 48,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
+        color: COLORS.TEXT,
     },
 
     selectedContainer: {
-        backgroundColor: COLORS.SURFACE_BLUE,
-        padding: 15,
+        backgroundColor: COLORS.SURFACE_ALT,
+        padding: 12,
         borderRadius: 10,
-        marginTop: 20,
-        marginLeft: 5,
+        marginTop: 12,
         borderWidth: 1,
-        borderColor: COLORS.BORDER_BLUE
+        borderColor: COLORS.BORDER,
     },
 
     selectedLabel: {
-        fontSize: 14,
-        color: COLORS.TEXT_MUTED,
-        fontWeight: "600",
-        marginBottom: 5
+        fontSize: 12,
+        color: COLORS.WARM_TEXT,
+        fontWeight: '500',
+        marginBottom: 4,
     },
 
     selectedText: {
-        fontSize: 16,
+        fontSize: 14,
         color: COLORS.TEXT,
-        fontStyle: "italic"
-    }
+        fontStyle: 'italic',
+    },
 });
 
 export default React.memo(InjurySection);

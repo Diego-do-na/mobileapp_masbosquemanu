@@ -66,7 +66,7 @@ function VitalsSection({ data, onUpdate, onValidationChange }) {
     ];
 
     return (
-        <View style={{ marginRight: 15, marginTop: 30 }}>
+        <View>
             <Text style={styles.title} allowFontScaling={false}>Signos Vitales</Text>
 
             <View style={styles.section}>
@@ -74,9 +74,7 @@ function VitalsSection({ data, onUpdate, onValidationChange }) {
                     const hasError = errors[vital.field];
                     return (
                         <View key={vital.field} style={styles.vitalContainer}>
-                            <View style={styles.topLabel}>
-                                <Text style={styles.vitalLabel} allowFontScaling={false}>{vital.text}</Text>
-                            </View>
+                            <Text style={styles.vitalLabel} allowFontScaling={false}>{vital.text}</Text>
                             <TextInput
                                 placeholder={vital.placeholder}
                                 style={[styles.vital, hasError && styles.vitalError]}
@@ -99,73 +97,61 @@ function VitalsSection({ data, onUpdate, onValidationChange }) {
 
 const styles = StyleSheet.create({
     section: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        rowGap: 15,
-        columnGap: 15,
-        marginLeft: 5,
-        justifyContent: "space-between"
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        rowGap: 12,
+        columnGap: 12,
+        justifyContent: 'space-between',
     },
 
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
-        marginBottom: 10
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 12,
     },
 
     vitalContainer: {
-        width: "47%"
+        width: '47%',
     },
 
     vitalLabel: {
-        fontSize: 14,
-        color: COLORS.TEXT_MUTED,
-        marginBottom: 5,
-        fontWeight: "600",
-        marginLeft: 5
+        fontSize: 12,
+        color: COLORS.WARM_TEXT,
+        marginBottom: 4,
+        fontWeight: '500',
+        marginLeft: 2,
     },
 
     vital: {
-        padding: 15,
+        paddingHorizontal: 12,
+        paddingVertical: 12,
         backgroundColor: COLORS.BACKGROUND,
         borderRadius: 10,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
         color: COLORS.TEXT,
-        fontSize: 18,
-        fontWeight: "500",
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        paddingHorizontal: 10
+        fontSize: 16,
+        fontWeight: '400',
     },
 
     vitalError: {
         borderWidth: 1.5,
         borderColor: COLORS.DANGER,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.DANGER, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.4, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
     },
 
     errorText: {
         color: COLORS.DANGER,
         fontSize: 11,
         marginTop: 3,
-        marginLeft: 5,
-        fontWeight: "500"
+        marginLeft: 2,
+        fontWeight: '500',
     },
 
     topLabel: {
-        backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 10,
-        bottom: -15,
-        zIndex: 2,
-        width: 100,
-        left: 13,
-        paddingLeft: 5
-    }
+        marginBottom: 4,
+    },
 });
 
 export default React.memo(VitalsSection);

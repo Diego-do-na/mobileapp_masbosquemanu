@@ -1,4 +1,5 @@
 // Paleta de colores centralizada para FrapApp.
+// Paleta: verde bosque con acentos café.
 // Importar desde aquí — nunca definir colores inline en los archivos.
 
 // ---------------------------------------------------------------------------
@@ -6,80 +7,102 @@
 // ---------------------------------------------------------------------------
 export const COLORS = {
     // ── Marca ──────────────────────────────────────────────────────────────
-    PRIMARY:          '#3b824f',       // Verde principal de la marca
-    PRIMARY_DARK:     '#165057',       // Verde azulado oscuro / teal
-    SECONDARY:        '#76b146',       // Verde botón / link (rgb 118,177,70)
+    PRIMARY:          '#3B6D11',       // Verde medio — botones primarios, acentos
+    PRIMARY_DARK:     '#173404',       // Verde oscuro — fondo splash, textos principales
+    SECONDARY:        '#639922',       // Verde muted — links, placeholders
 
     // ── Estados ────────────────────────────────────────────────────────────
-    DANGER:           '#e74c3c',       // Rojo error / eliminar
-    WARNING:          '#f39c12',       // Naranja advertencia / pendiente
-    SUCCESS:          '#27ae60',       // Verde éxito / enviado
-    INFO:             '#3498db',       // Azul información / enviando
+    DANGER:           '#A32D2D',       // Rojo error / eliminar
+    WARNING:          '#854F0B',       // Café oscuro — advertencia / pendiente
+    SUCCESS:          '#3B6D11',       // Verde éxito
+    INFO:             '#185FA5',       // Azul información / enviando
 
     // ── Texto ──────────────────────────────────────────────────────────────
-    TEXT:             '#2f3c42',       // Texto primario (más oscuro)
-    TEXT_DARK:        '#37474f',       // Texto oscuro
-    TEXT_MEDIUM:      '#495057',       // Texto medio
-    TEXT_LABEL:       '#535f64',       // Etiquetas de formularios
-    TEXT_MUTED:       '#666',          // Texto apagado
-    TEXT_LIGHT:       '#888',          // Texto claro / fechas
-    TEXT_PLACEHOLDER: '#999',          // Texto placeholder
-    TEXT_BLACK:       '#050f08',       // Casi negro (título header)
-    TEXT_WHITE:       '#fbfeff',       // Blanco texto en botones
-    TEXT_NAVY:        '#2c3e50',       // Azul marino oscuro
+    TEXT:             '#2C2C2A',       // Texto cuerpo (negro suave)
+    TEXT_DARK:        '#173404',       // Títulos de sección (verde oscuro)
+    TEXT_MEDIUM:      '#2C2C2A',       // Texto medio
+    TEXT_LABEL:       '#888780',       // Etiquetas de formularios
+    TEXT_MUTED:       '#888780',       // Texto secundario / apagado
+    TEXT_LIGHT:       '#888780',       // Texto claro / fechas
+    TEXT_PLACEHOLDER: '#639922',       // Placeholder en fondos oscuros
+    TEXT_BLACK:       '#2C2C2A',       // Negro suave
+    TEXT_WHITE:       '#FFFFFF',       // Blanco texto en botones
+    TEXT_NAVY:        '#173404',       // Verde oscuro (títulos fuertes)
 
     // ── Fondos ─────────────────────────────────────────────────────────────
-    BACKGROUND:       '#ffffff',       // Fondo blanco principal
-    SURFACE:          '#f8f9fa',       // Superficie: tarjetas, inputs
-    SURFACE_ALT:      '#eef1f3',       // Superficie alternativa (selector opciones)
-    SURFACE_BLUE:     '#f0f8ff',       // Superficie azul claro (firmas, info)
-    SURFACE_INFO:     '#e8f4fd',       // Superficie información
-    HEADER_BG:        '#b2c29591',     // Fondo encabezado home
-    APP_TINT:         '#40b67127',     // Fondo pantalla FRAP
+    BACKGROUND:       '#FFFFFF',       // Fondo blanco principal
+    SURFACE:          '#F1EFE8',       // Gris cálido — secciones formulario
+    SURFACE_ALT:      '#EAF3DE',       // Verde suave — fondos de cards / badges
+    SURFACE_BLUE:     '#EAF3DE',       // Verde suave (reemplaza azul)
+    SURFACE_INFO:     '#EAF3DE',       // Verde suave información
+    HEADER_BG:        '#EAF3DE',       // Fondo encabezado home
+    APP_TINT:         '#F1EFE8',       // Fondo pantalla FRAP
 
     // ── Bordes ─────────────────────────────────────────────────────────────
-    BORDER:           '#e0e0e0',       // Borde principal
-    BORDER_LIGHT:     '#e9ecef',       // Borde claro
-    BORDER_SOFT:      '#dee2e6',       // Borde suave
-    BORDER_BLUE:      '#d0e7ff',       // Borde azul (firma / info)
+    BORDER:           '#D3D1C7',       // Borde principal (gris cálido)
+    BORDER_LIGHT:     '#D3D1C7',       // Borde claro
+    BORDER_SOFT:      '#D3D1C7',       // Borde suave
+    BORDER_BLUE:      '#D3D1C7',       // Borde (reemplaza azul)
 
     // ── Sombras ────────────────────────────────────────────────────────────
-    SHADOW:           'rgb(61, 60, 60)',
-    SHADOW_LIGHT:     'rgb(100, 99, 99)',
-    SHADOW_WARM:      'rgb(167, 161, 161)',
+    SHADOW:           '#173404',
+    SHADOW_LIGHT:     '#3B6D11',
+    SHADOW_WARM:      '#173404',
 
     // ── Botones específicos ────────────────────────────────────────────────
-    SAVE_BUTTON:      '#4063a5c0',     // Botón guardar (azul con opacidad)
-    SIGNUP_BUTTON:    '#295486d8',     // Botón registro (azul con opacidad)
-    SIGNUP_ACCENT:    '#295486',       // Acento azul en registro
-    CAMERA_BUTTON:    '#98999b98',     // Botón cámara (gris con opacidad)
-    DISABLED:         'rgb(150, 150, 150)', // Estado deshabilitado
-    DANGER_LIGHT:     '#ff6b6b',       // Rojo suave (offline badge, limpiar)
+    SAVE_BUTTON:      '#3B6D11',       // Botón guardar
+    SIGNUP_BUTTON:    '#3B6D11',       // Botón registro
+    SIGNUP_ACCENT:    '#3B6D11',       // Acento verde registro
+    CAMERA_BUTTON:    '#EAF3DE',       // Botón cámara (verde suave)
+    DISABLED:         '#D3D1C7',       // Estado deshabilitado
+    DANGER_LIGHT:     '#A32D2D',       // Rojo (eliminar / limpiar)
 
     // ── Fondos de contenedores ─────────────────────────────────────────────
-    CONTAINER_BG:     '#6d6d6d1c',     // Fondo contenedor signup (gris claro)
-    INPUT_BG:         '#f8f8f89c',     // Fondo input signup (blanco con opacidad)
+    CONTAINER_BG:     'rgba(255,255,255,0.08)', // Fondo semi-transparente (login/signup)
+    INPUT_BG:         'rgba(255,255,255,0.08)', // Input sobre fondo oscuro
 
     // ── Switch / Toggle ───────────────────────────────────────────────────
-    SWITCH_TRACK_OFF: '#767577',
-    SWITCH_TRACK_ON:  '#81afffa4',
-    SWITCH_THUMB_ON:  '#326bac',
-    SWITCH_THUMB_OFF: '#f4f3f4',
-    SWITCH_IOS_BG:    '#3e3e3e',
+    SWITCH_TRACK_OFF: '#D3D1C7',
+    SWITCH_TRACK_ON:  '#3B6D11',
+    SWITCH_THUMB_ON:  '#FFFFFF',
+    SWITCH_THUMB_OFF: '#F1EFE8',
+    SWITCH_IOS_BG:    '#173404',
 
     // ── Selección / overlays ──────────────────────────────────────────────
-    SELECTED:         '#78797ada',     // Ítem seleccionado (color activo)
+    SELECTED:         '#3B6D11',       // Ítem seleccionado
     OVERLAY_DARK:     'rgba(0,0,0,0.7)',
-    OVERLAY_RED:      'rgba(255,0,0,0.7)',
+    OVERLAY_RED:      'rgba(163,45,45,0.7)',
 
     // ── Íconos ────────────────────────────────────────────────────────────
-    ICON_GREY:        'rgb(126, 118, 118)',
-    ICON_DARK:        'rgb(95, 89, 89)',
-    ICON_MUTED:       '#ccc',
+    ICON_GREY:        '#888780',
+    ICON_DARK:        '#2C2C2A',
+    ICON_MUTED:       '#D3D1C7',
 
     // ── Insumos / módulo de suministros ───────────────────────────────────
-    ADD_BUTTON:       '#4caf4fcb',     // Verde añadir con opacidad
-    ADD_BUTTON_ALT:   '#4caf8ead',     // Verde añadir alternativo
-    SECONDARY_ITEM:   '#dadddc91',     // Fondo ítem secundario
-    BUTTON_GREY:      '#a8aaa888',     // Botón gris neutro
+    ADD_BUTTON:       '#3B6D11',
+    ADD_BUTTON_ALT:   '#EAF3DE',
+    SECONDARY_ITEM:   '#F1EFE8',
+    BUTTON_GREY:      '#D3D1C7',
+
+    // ── Paleta bosque-café extendida ──────────────────────────────────────
+    FOREST_DARK:      '#173404',       // Verde oscuro (fondo splash / títulos fuertes)
+    FOREST_MID:       '#3B6D11',       // Verde medio (botones, acentos)
+    FOREST_SOFT:      '#EAF3DE',       // Verde suave (cards, badges)
+    FOREST_LIGHT:     '#C0DD97',       // Verde claro (textos sobre fondo verde)
+    FOREST_MUTED:     '#639922',       // Verde muted (subtítulos sobre oscuro)
+    CAFFE_DARK:       '#854F0B',       // Café oscuro (estados pendientes)
+    CAFFE_LIGHT:      '#FAEEDA',       // Café claro (fondo badge pendiente)
+    WARM_BG:          '#F1EFE8',       // Gris cálido fondo secciones
+    WARM_BORDER:      '#D3D1C7',       // Borde gris cálido
+    WARM_TEXT:        '#888780',       // Texto secundario gris cálido
+
+    // ── Badges de status ─────────────────────────────────────────────────
+    STATUS_SENT_BG:   '#EAF3DE',
+    STATUS_SENT_TEXT: '#3B6D11',
+    STATUS_PEND_BG:   '#FAEEDA',
+    STATUS_PEND_TEXT: '#854F0B',
+    STATUS_FAIL_BG:   '#FCEBEB',
+    STATUS_FAIL_TEXT: '#A32D2D',
+    STATUS_SYNC_BG:   '#E6F1FB',
+    STATUS_SYNC_TEXT: '#185FA5',
 };

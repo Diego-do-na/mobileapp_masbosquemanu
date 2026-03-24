@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesome5, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -13,13 +13,13 @@ import { STORAGE_KEYS } from "../constants/storage";
 import API_URL from "../config";
 
 // ---------------------------------------------------------------------------
-// CONSTANTES DE STATUS
+// HELPERS DE STATUS
 // ---------------------------------------------------------------------------
-const STATUS_COLORS = {
-    pending: COLORS.WARNING,
-    syncing: COLORS.INFO,
-    sent:    COLORS.SUCCESS,
-    failed:  COLORS.DANGER,
+const STATUS_STYLE = {
+    pending: { bg: COLORS.STATUS_PEND_BG, text: COLORS.STATUS_PEND_TEXT },
+    syncing: { bg: COLORS.STATUS_SYNC_BG, text: COLORS.STATUS_SYNC_TEXT },
+    sent:    { bg: COLORS.STATUS_SENT_BG, text: COLORS.STATUS_SENT_TEXT },
+    failed:  { bg: COLORS.STATUS_FAIL_BG, text: COLORS.STATUS_FAIL_TEXT },
 };
 
 const STATUS_LABELS = {
@@ -32,14 +32,13 @@ const STATUS_LABELS = {
 // ---------------------------------------------------------------------------
 // COMPONENTE PRINCIPAL
 // ---------------------------------------------------------------------------
-export default function HomeScreen(){
+export default function HomeScreen() {
     const { userInfo, logout } = useAuth();
 
-    const [pendingReports,  setPendingReports]  = useState([]);
-    const [isOnline,        setIsOnline]        = useState(true);
-    const [checkingConn,    setCheckingConn]    = useState(false);
+    const [pendingReports, setPendingReports] = useState([]);
+    const [isOnline,       setIsOnline]       = useState(true);
+    const [checkingConn,   setCheckingConn]   = useState(false);
 
-    // Verificar conectividad real al montar + escuchar cambios
     useEffect(() => {
         checkConnectivity();
 
@@ -54,7 +53,6 @@ export default function HomeScreen(){
         return unsubscribe;
     }, []);
 
-    // Recargar reportes pendientes cada vez que la pantalla recibe foco
     useFocusEffect(
         useCallback(() => {
             loadPendingReports();
@@ -117,103 +115,121 @@ export default function HomeScreen(){
         );
     };
 
-    // Reportes que no están en 'sent'
     const pendingCount = pendingReports.filter(r => r.status !== 'sent').length;
 
-    return(
+    return (
         <SafeAreaView style={styles.container}>
-
-            {/* ── Header ── */}
-            <View style={styles.header}>
-                <View style={styles.headerLeft}>
-                    <MaterialIcons name="local-hospital" size={40} color={COLORS.PRIMARY} />
-                    <Text style={styles.headerTitle}>FrapApp</Text>
-                </View>
-
-                <View style={styles.headerRight}>
-                    {/* Indicador online / offline */}
-                    <View style={[styles.connBadge, {backgroundColor: isOnline ? COLORS.SUCCESS : COLORS.DANGER}]}>
-                        <Ionicons
-                            name={isOnline ? "wifi" : "wifi-outline"}
-                            size={12}
-                            color="white"
-                        />
-                        <Text style={styles.connText}>{isOnline ? 'Online' : 'Offline'}</Text>
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
+                {/* ── Header ── */}
+                <View style={styles.header}>
+                    <View style={styles.headerLeft}>
+                        <View>
+                            <Text style={styles.greeting}>Buenos</Text>
+                            <Text style={styles.userName}>
+                                {userInfo?.nombre || userInfo?.usuario || 'Paramédico'}
+                            </Text>
+                        </View>
                     </View>
 
-                    {userInfo && (
-                        <View style={styles.userSection}>
-                            <View style={styles.userInfo}>
-                                <Ionicons name="person-circle" size={22} color={COLORS.PRIMARY} />
-                                <Text style={styles.userName}>{userInfo.usuario}</Text>
-                            </View>
-                            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                                <Ionicons name="log-out-outline" size={22} color={COLORS.DANGER} />
-                            </TouchableOpacity>
+                    <View style={styles.headerRight}>
+                        {/* Badge conectividad */}
+                        <View style={[
+                            styles.connBadge,
+                            { backgroundColor: isOnline ? COLORS.STATUS_SENT_BG : COLORS.STATUS_PEND_BG }
+                        ]}>
+                            <Ionicons
+                                name={isOnline ? "wifi" : "wifi-outline"}
+                                size={11}
+                                color={isOnline ? COLORS.STATUS_SENT_TEXT : COLORS.STATUS_PEND_TEXT}
+                            />
+                            <Text style={[
+                                styles.connText,
+                                { color: isOnline ? COLORS.STATUS_SENT_TEXT : COLORS.STATUS_PEND_TEXT }
+                            ]}>
+                                {isOnline ? 'Online' : 'Offline'}
+                            </Text>
                         </View>
-                    )}
+
+                        {/* Avatar */}
+                        <View style={styles.avatar}>
+                            <View style={styles.avatarDot} />
+                        </View>
+
+                        {/* Logout */}
+                        <TouchableOpacity
+                            onPress={handleLogout}
+                            style={styles.logoutButton}
+                            accessibilityRole="button"
+                            accessibilityLabel="Cerrar sesión"
+                        >
+                            <Ionicons name="log-out-outline" size={20} color={COLORS.WARM_TEXT} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
 
-            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-
-                {/* ── Bienvenida ── */}
-                <View style={styles.welcomeCard}>
-                    <Text style={styles.welcomeText}>
-                        {userInfo ? `Bienvenido,` : 'Bienvenido'}
-                    </Text>
-                    {userInfo && (
-                        <Text style={styles.welcomeName}>
-                            {userInfo.nombre || userInfo.usuario}
-                        </Text>
-                    )}
-                </View>
-
-                {/* ── Contador de pendientes (si hay) ── */}
+                {/* ── Banner sync ── */}
                 {pendingCount > 0 && (
-                    <View style={[styles.syncBanner, {backgroundColor: isOnline ? COLORS.INFO + '22' : COLORS.WARNING + '22'}]}>
+                    <View style={[
+                        styles.syncBanner,
+                        { backgroundColor: isOnline ? COLORS.STATUS_SYNC_BG : COLORS.STATUS_PEND_BG }
+                    ]}>
                         <Ionicons
                             name={isOnline ? "cloud-upload-outline" : "cloud-offline-outline"}
-                            size={20}
-                            color={isOnline ? COLORS.INFO : COLORS.WARNING}
+                            size={16}
+                            color={isOnline ? COLORS.STATUS_SYNC_TEXT : COLORS.STATUS_PEND_TEXT}
                         />
-                        <Text style={[styles.syncBannerText, {color: isOnline ? COLORS.INFO : COLORS.WARNING}]}>
+                        <Text style={[
+                            styles.syncBannerText,
+                            { color: isOnline ? COLORS.STATUS_SYNC_TEXT : COLORS.STATUS_PEND_TEXT }
+                        ]}>
                             {pendingCount} reporte{pendingCount !== 1 ? 's' : ''} pendiente{pendingCount !== 1 ? 's' : ''} de sincronizar
                         </Text>
                     </View>
                 )}
 
-                {/* ── Botón nuevo reporte ── */}
+                {/* ── Card nuevo FRAP ── */}
                 <TouchableOpacity
                     style={styles.newReport}
                     onPress={() => router.navigate("/frap")}
                     activeOpacity={0.85}
+                    accessibilityRole="button"
+                    accessibilityLabel="Crear nuevo reporte FRAP"
                 >
-                    <View style={styles.newReportIcon}>
-                        <FontAwesome5 name="notes-medical" size={60} color={COLORS.PRIMARY} />
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.newReportLabel}>Nuevo reporte</Text>
+                        <Text style={styles.newReportText}>+ Nuevo FRAP</Text>
+                        <View style={styles.newReportBadge}>
+                            <Text style={styles.newReportBadgeText}>Formulario completo</Text>
+                        </View>
                     </View>
-                    <Text style={styles.newReportText}>Nuevo FRAP</Text>
-                    <Text style={styles.newReportSubtext}>Registro de Atención Prehospitalaria</Text>
+                    <Ionicons name="chevron-forward" size={24} color={COLORS.FOREST_LIGHT} />
                 </TouchableOpacity>
 
-                {/* ── Reportes locales con badge de status ── */}
+                {/* ── Sección reportes recientes ── */}
                 {pendingReports.length > 0 && (
-                    <View style={styles.pendingSection}>
-                        <View style={styles.pendingHeader}>
-                            <Text style={styles.pendingSectionTitle}>
-                                Reportes locales ({pendingReports.length})
-                            </Text>
-                            <TouchableOpacity onPress={loadPendingReports}>
-                                <Ionicons name="refresh" size={20} color={COLORS.PRIMARY_DARK} />
+                    <View style={styles.reportsSection}>
+                        <View style={styles.reportsSectionHeader}>
+                            <Text style={styles.reportsSectionTitle}>Reportes recientes</Text>
+                            <TouchableOpacity
+                                onPress={loadPendingReports}
+                                accessibilityRole="button"
+                                accessibilityLabel="Actualizar lista de reportes"
+                            >
+                                <Ionicons name="refresh" size={18} color={COLORS.WARM_TEXT} />
                             </TouchableOpacity>
                         </View>
 
                         {pendingReports.map((report, index) => {
-                            const color         = STATUS_COLORS[report.status] ?? STATUS_COLORS.pending;
-                            const label         = STATUS_LABELS[report.status] ?? report.status;
+                            const statusStyle    = STATUS_STYLE[report.status] ?? STATUS_STYLE.pending;
+                            const label          = STATUS_LABELS[report.status] ?? report.status;
                             const pacienteNombre = report.paciente?.nombre ?? 'Sin nombre';
                             const fecha          = report.createdAt
-                                ? new Date(report.createdAt).toLocaleDateString('es-MX')
+                                ? new Date(report.createdAt).toLocaleDateString('es-MX', {
+                                    hour: '2-digit', minute: '2-digit'
+                                  })
                                 : '—';
                             const retryTime = report.nextRetryAt && report.status === 'pending'
                                 ? new Date(report.nextRetryAt).toLocaleTimeString('es-MX', {
@@ -222,25 +238,26 @@ export default function HomeScreen(){
                                 : null;
 
                             return (
-                                <View key={report.id ?? index} style={styles.pendingItem}>
-                                    <View style={[styles.statusBadge, { backgroundColor: color }]}>
-                                        <Text style={styles.statusBadgeText}>{label}</Text>
-                                    </View>
-                                    <View style={styles.pendingInfo}>
-                                        <Text style={styles.pendingPatient} numberOfLines={1}>
+                                <View key={report.id ?? index} style={styles.reportItem}>
+                                    <View style={styles.reportItemInfo}>
+                                        <Text style={styles.reportPatient} numberOfLines={1}>
                                             {pacienteNombre}
                                         </Text>
-                                        <Text style={styles.pendingDate}>{fecha}</Text>
+                                        <Text style={styles.reportDate}>{fecha}</Text>
                                         {retryTime && (
-                                            <Text style={styles.pendingRetry}>
-                                                Reintento a las {retryTime}
-                                            </Text>
+                                            <Text style={styles.reportRetry}>Reintento a las {retryTime}</Text>
                                         )}
                                         {report.status === 'failed' && (
-                                            <Text style={styles.pendingFailed}>
+                                            <Text style={styles.reportFailed}>
                                                 Error permanente — {report.attempts} intentos
                                             </Text>
                                         )}
+                                    </View>
+
+                                    <View style={[styles.statusBadge, { backgroundColor: statusStyle.bg }]}>
+                                        <Text style={[styles.statusBadgeText, { color: statusStyle.text }]}>
+                                            {label}
+                                        </Text>
                                     </View>
                                 </View>
                             );
@@ -258,113 +275,79 @@ export default function HomeScreen(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f2f5f2',
-        paddingTop: 10,
+        backgroundColor: COLORS.BACKGROUND,
+    },
+
+    scrollContent: {
+        paddingHorizontal: 20,
+        paddingVertical: 20,
+        gap: 12,
     },
 
     // ── Header ──
     header: {
-        width: "100%",
-        minHeight: 70,
-        backgroundColor: COLORS.HEADER_BG,
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexDirection: "row",
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        flexWrap: 'wrap',
-        gap: 8,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 4,
     },
 
     headerLeft: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 8,
+        flex: 1,
     },
 
-    headerTitle: {
-        fontSize: 26,
-        fontWeight: "bold",
-        color: COLORS.TEXT_BLACK,
+    greeting: {
+        fontSize: 13,
+        color: COLORS.WARM_TEXT,
+        fontWeight: '400',
+    },
+
+    userName: {
+        fontSize: 28,
+        fontWeight: '800',
+        color: COLORS.FOREST_DARK,
+        letterSpacing: -0.5,
+        marginTop: 2,
     },
 
     headerRight: {
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: 10,
-        flexWrap: 'wrap',
     },
 
     connBadge: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 12,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 20,
     },
 
     connText: {
-        color: 'white',
         fontSize: 11,
         fontWeight: '700',
     },
 
-    userSection: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 8,
+    avatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: COLORS.FOREST_SOFT,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
-    userInfo: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 5,
-        backgroundColor: "rgba(255,255,255,0.7)",
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 15,
+    avatarDot: {
+        width: 14,
+        height: 14,
+        borderRadius: 7,
+        backgroundColor: COLORS.FOREST_MID,
     },
 
-    userName: {
-        fontSize: 13,
-        fontWeight: "600",
-        color: COLORS.TEXT_DARK,
-    },
-
-    logoutButton: { padding: 4 },
-
-    // ── Scroll ──
-    scrollContent: {
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-        gap: 16,
-    },
-
-    // ── Bienvenida ──
-    welcomeCard: {
-        borderRadius: 16,
-        backgroundColor: COLORS.BACKGROUND,
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        shadowColor: COLORS.SHADOW,
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.08,
-        shadowRadius: 4,
-        elevation: 2,
-    },
-
-    welcomeText: {
-        fontSize: 18,
-        color: COLORS.TEXT_MUTED,
-        fontWeight: '400',
-    },
-
-    welcomeName: {
-        fontSize: 26,
-        fontWeight: "bold",
-        color: COLORS.TEXT_DARK,
-        marginTop: 2,
+    logoutButton: {
+        padding: 4,
     },
 
     // ── Banner sync ──
@@ -379,123 +362,114 @@ const styles = StyleSheet.create({
 
     syncBannerText: {
         fontSize: 13,
-        fontWeight: '600',
+        fontWeight: '500',
     },
 
-    // ── Botón nuevo reporte ──
+    // ── Nuevo FRAP ──
     newReport: {
-        alignSelf: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 20,
-        paddingVertical: 32,
-        paddingHorizontal: 30,
-        backgroundColor: COLORS.BACKGROUND,
-        width: "100%",
-        shadowColor: COLORS.SHADOW,
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.15,
-        shadowRadius: 6,
-        elevation: 4,
+        backgroundColor: COLORS.FOREST_MID,
+        borderRadius: 16,
+        padding: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
-    newReportIcon: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: COLORS.APP_TINT,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 12,
+    newReportLabel: {
+        fontSize: 12,
+        color: COLORS.FOREST_LIGHT,
+        fontWeight: '500',
+        marginBottom: 6,
+        letterSpacing: 0.2,
     },
 
     newReportText: {
-        fontSize: 22,
-        fontWeight: "bold",
-        color: COLORS.TEXT_DARK,
-        marginBottom: 4,
+        fontSize: 24,
+        fontWeight: '800',
+        color: COLORS.TEXT_WHITE,
+        letterSpacing: -0.5,
+        marginBottom: 12,
     },
 
-    newReportSubtext: {
-        fontSize: 13,
-        color: COLORS.TEXT_MUTED,
-    },
-
-    // ── Sección reportes pendientes ──
-    pendingSection: {
-        backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 16,
-        padding: 16,
-        gap: 10,
-        shadowColor: COLORS.SHADOW,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-
-    pendingHeader: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 4,
-    },
-
-    pendingSectionTitle: {
-        fontSize: 15,
-        fontWeight: "700",
-        color: COLORS.PRIMARY_DARK,
-    },
-
-    pendingItem: {
-        flexDirection: "row",
-        alignItems: "flex-start",
-        gap: 10,
-        paddingVertical: 8,
-        borderBottomWidth: 0.5,
-        borderBottomColor: COLORS.BORDER,
-    },
-
-    statusBadge: {
-        paddingHorizontal: 8,
-        paddingVertical: 4,
+    newReportBadge: {
+        alignSelf: 'flex-start',
+        backgroundColor: '#2d5a0e',
         borderRadius: 8,
-        minWidth: 76,
-        alignItems: "center",
-        marginTop: 2,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
     },
 
-    statusBadgeText: {
-        color: "white",
-        fontSize: 11,
-        fontWeight: "700",
+    newReportBadgeText: {
+        fontSize: 12,
+        fontWeight: '500',
+        color: COLORS.FOREST_LIGHT,
     },
 
-    pendingInfo: {
+    // ── Reportes recientes ──
+    reportsSection: {
+        gap: 8,
+    },
+
+    reportsSectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 4,
+    },
+
+    reportsSectionTitle: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: COLORS.FOREST_DARK,
+        letterSpacing: -0.3,
+    },
+
+    reportItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.SURFACE,
+        borderRadius: 14,
+        padding: 14,
+        gap: 10,
+    },
+
+    reportItemInfo: {
         flex: 1,
         gap: 2,
     },
 
-    pendingPatient: {
+    reportPatient: {
         fontSize: 14,
-        fontWeight: "600",
+        fontWeight: '500',
         color: COLORS.TEXT,
     },
 
-    pendingDate: {
+    reportDate: {
         fontSize: 12,
-        color: COLORS.TEXT_LIGHT,
+        color: COLORS.WARM_TEXT,
+        fontWeight: '400',
     },
 
-    pendingRetry: {
+    reportRetry: {
         fontSize: 11,
-        color: COLORS.WARNING,
-        fontStyle: "italic",
+        color: COLORS.CAFFE_DARK,
+        fontStyle: 'italic',
     },
 
-    pendingFailed: {
+    reportFailed: {
         fontSize: 11,
         color: COLORS.DANGER,
-        fontStyle: "italic",
+        fontStyle: 'italic',
+    },
+
+    statusBadge: {
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 8,
+    },
+
+    statusBadgeText: {
+        fontSize: 12,
+        fontWeight: '500',
     },
 });

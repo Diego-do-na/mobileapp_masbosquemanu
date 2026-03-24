@@ -179,77 +179,80 @@ function GeneralSection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "700",
-        color: COLORS.TEXT
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 2,
     },
 
     subTitle: {
-        fontSize: 20,
-        fontWeight: "500",
-        color: COLORS.TEXT
+        fontSize: 12,
+        fontWeight: '500',
+        color: COLORS.WARM_TEXT,
+        marginBottom: 8,
+        marginTop: 10,
     },
 
     container: {
-        borderRadius: 15,
+        borderRadius: 10,
         backgroundColor: COLORS.BACKGROUND,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        marginTop: 20,
-        marginRight: 15,
-        marginLeft: 5,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+        marginTop: 10,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     subContainer: {
-        position: "relative",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        gap: 10
+        position: 'relative',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 10,
     },
 
     dateTimeButton: {
-        marginTop: 15,
-        width: "48%",
-        gap: 10,
-        paddingVertical: 12,
-        borderRadius: 15,
+        width: '48%',
+        gap: 8,
+        paddingVertical: 10,
+        borderRadius: 10,
         backgroundColor: COLORS.SURFACE_ALT,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        paddingHorizontal: 15
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 12,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     locationsButton: {
-        marginTop: 15,
-        width: "100%",
-        paddingVertical: 12,
-        borderRadius: 15,
+        width: '100%',
+        paddingVertical: 10,
+        borderRadius: 10,
         backgroundColor: COLORS.SURFACE_ALT,
-        paddingHorizontal: 20
+        paddingHorizontal: 14,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     headerDropDown: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         flex: 1,
-        alignItems: "center"
+        alignItems: 'center',
     },
 
     boldText: {
-        fontWeight: "bold",
-        fontSize: 16
+        fontWeight: '500',
+        fontSize: 14,
+        color: COLORS.TEXT,
     },
 
     dropDown: {
         backgroundColor: COLORS.SURFACE_ALT,
         marginTop: 10,
         maxHeight: 300,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
 });
 

@@ -78,7 +78,7 @@ function ESCGWSection({ data, onUpdate }) {
     };
 
     return (
-        <View style={{ marginRight: 15, marginTop: 50 }}>
+        <View>
             <Text style={styles.title} allowFontScaling={false}>Nivel de Conciencia: Escala de Glasgow</Text>
 
             {respuestas.map((respuesta, indexRespuestas) => {
@@ -149,79 +149,74 @@ function ESCGWSection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
-        marginBottom: 15
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 12,
     },
 
     respuestaContainer: {
-        marginBottom: 15
+        marginBottom: 10,
     },
 
     container: {
-        borderRadius: 15,
+        borderRadius: 10,
         backgroundColor: COLORS.BACKGROUND,
-        padding: 15,
-        marginTop: 10,
-        marginRight: 15,
-        marginLeft: 5,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
+        padding: 12,
+        marginTop: 6,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     respuestasButton: {
-        width: "100%",
+        width: '100%',
         paddingVertical: 10,
-        borderRadius: 15,
+        borderRadius: 10,
         backgroundColor: COLORS.SURFACE_ALT,
-        paddingHorizontal: 20,
+        paddingHorizontal: 14,
     },
 
     headerDropDown: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
 
     text: {
-        fontSize: 18,
-        color: "#535f64f8",
-        fontWeight: "500"
+        fontSize: 15,
+        color: COLORS.TEXT_LABEL,
+        fontWeight: '400',
     },
 
     dropDown: {
         backgroundColor: COLORS.SURFACE_ALT,
         marginTop: 10,
         paddingBottom: 10,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
 
     total: {
-        backgroundColor: COLORS.BACKGROUND,
-        padding: 15,
-        marginTop: 25,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        justifyContent: "center",
-        alignItems: "center",
-        width: "50%",
-        alignSelf: "center",
+        backgroundColor: COLORS.FOREST_SOFT,
+        padding: 14,
+        marginTop: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '50%',
+        alignSelf: 'center',
         borderRadius: 40,
-        marginBottom: 20
+        marginBottom: 4,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     label: {
-        fontSize: 14,
-        color: "gray",
-        marginBottom: 5,
-        marginLeft: 20,
-        fontWeight: "600"
-    }
+        fontSize: 12,
+        color: COLORS.WARM_TEXT,
+        marginBottom: 4,
+        marginLeft: 2,
+        fontWeight: '500',
+    },
 });
 
 export default React.memo(ESCGWSection);

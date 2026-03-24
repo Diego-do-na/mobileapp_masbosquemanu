@@ -1,7 +1,7 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView, Platform } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons, Feather, Octicons, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { useRouter, Link } from "expo-router";
 
@@ -9,29 +9,7 @@ import API_URL from "../config";
 import { useAuth } from "../context/AuthContext";
 import { COLORS } from "../constants/colors";
 
-const icon_size = 80;
-
-function Title(){
-  return (
-    <>
-      <View style={styles.hospitalIcon}>
-        <MaterialIcons
-          name="local-hospital"
-          size={icon_size / 1.5}
-          color={COLORS.PRIMARY}
-        />
-      </View>
-
-      <Text style={[styles.baseText, {marginBottom: 5}]}>FrapApp</Text>
-
-      <Text style={{color: COLORS.TEXT_DARK + 'c0', fontSize: 18, marginTop: 20}}>
-        Iniciar sesion para continuar
-      </Text>
-    </>
-  )
-};
-
-function Login(){
+function Login() {
   const [usuario,      setUsuario]      = useState('');
   const [contrasena,   setContrasena]   = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -40,16 +18,13 @@ function Login(){
   const router   = useRouter();
   const { login, token } = useAuth();
 
-  // Si ya hay sesión activa, el guard en _layout.tsx redirige automáticamente.
-  // No se necesita checkExistingSession aquí.
-
-  async function userLogin(){
+  async function userLogin() {
     if (isLoading) return;
 
     setIsLoading(true);
     setErrorMessage('');
 
-    try{
+    try {
       const response = await fetch(`${API_URL}/api/authParamedicos/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,7 +34,7 @@ function Login(){
       const responseData = await response.json();
 
       if (responseData.success) {
-        const newToken   = responseData.token || 'session_active';
+        const newToken    = responseData.token || 'session_active';
         const newUserInfo = {
           usuario: responseData.usuario || usuario,
           nombre:  responseData.nombre  || '',
@@ -84,13 +59,12 @@ function Login(){
       if (error.message && error.message.includes('Network')) {
         setErrorMessage("*Error de conexión. Verifica tu internet");
 
-        // Si ya hay token en contexto, ofrecer continuar offline
         if (token) {
           Alert.alert(
             "Modo Offline",
             "No hay conexión a internet. ¿Desea continuar con la sesión guardada?",
             [
-              { text: "Cancelar",         style: "cancel" },
+              { text: "Cancelar",          style: "cancel" },
               { text: "Continuar Offline", onPress: () => router.replace("/home") }
             ]
           );
@@ -101,9 +75,9 @@ function Login(){
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  function validCredentials(){
+  function validCredentials() {
     if (!usuario.trim()) {
       setErrorMessage("*Usuario es requerido");
       return false;
@@ -125,76 +99,61 @@ function Login(){
       return false;
     }
     return true;
-  };
+  }
 
-  return(
-    <>
-      <View style={styles.loginCard}>
-        {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
+  return (
+    <View style={styles.loginCard}>
+      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
 
-        <View style={styles.field}>
-          <Feather name="user" size={30} style={{marginTop: 5}}/>
-          <TextInput
-            style={styles.fieldText}
-            placeholder="Usuario"
-            value={usuario}
-            onChangeText={(newUsuario) => {
-              setUsuario(newUsuario);
-              setErrorMessage('');
-            }}
-            autoCapitalize="none"
-            editable={!isLoading}
-          />
-        </View>
-
-        <View style={[styles.field, {marginTop: 10, marginBottom: 15}]}>
-          <Octicons name="lock" size={30} style={{marginTop: 5}}/>
-          <TextInput
-            style={[styles.fieldText, {paddingRight: 40}]}
-            placeholder="Contraseña"
-            value={contrasena}
-            onChangeText={(newContrasena) => {
-              setContrasena(newContrasena);
-              setErrorMessage('');
-            }}
-            secureTextEntry={!visiblePwd}
-            editable={!isLoading}
-          />
-
-          <TouchableOpacity
-            onPress={() => setVisiblePwd(!visiblePwd)}
-            style={{position: "absolute", top: 10, right: 8}}
-          >
-            <AntDesign
-              name={visiblePwd ? "eye-invisible" : "eye"}
-              size={25}
-              color="gray"
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{alignItems: "center"}}>
-          <TouchableOpacity
-            activeOpacity={0.2}
-            style={[styles.sendButton, isLoading && styles.disabledButton]}
-            onPress={() => {
-              if (validCredentials()) userLogin();
-            }}
-            disabled={isLoading}
-          >
-            <Text style={styles.buttonText}>
-              {isLoading ? "Cargando..." : "Ingresar"}
-            </Text>
-          </TouchableOpacity>
-        </View>
+      {/* Campo usuario */}
+      <View style={styles.field}>
+        <TextInput
+          style={styles.fieldText}
+          placeholder="Usuario"
+          placeholderTextColor="#B4B2A9"
+          value={usuario}
+          onChangeText={(v) => { setUsuario(v); setErrorMessage(''); }}
+          autoCapitalize="none"
+          editable={!isLoading}
+        />
       </View>
 
-      <View style={{flexDirection: "row", marginTop: 20}}>
-        <Text>¿No tienes cuenta? </Text>
-        <Link href="/signUp" style={{color: COLORS.SECONDARY}}>Registrate</Link>
+      {/* Campo contraseña */}
+      <View style={styles.field}>
+        <TextInput
+          style={[styles.fieldText, { paddingRight: 46 }]}
+          placeholder="Contraseña"
+          placeholderTextColor="#B4B2A9"
+          value={contrasena}
+          onChangeText={(v) => { setContrasena(v); setErrorMessage(''); }}
+          secureTextEntry={!visiblePwd}
+          editable={!isLoading}
+        />
+        <TouchableOpacity
+          onPress={() => setVisiblePwd(!visiblePwd)}
+          style={styles.eyeButton}
+          accessibilityRole="button"
+          accessibilityLabel={visiblePwd ? "Ocultar contraseña" : "Mostrar contraseña"}
+        >
+          <AntDesign name={visiblePwd ? "eye-invisible" : "eye"} size={20} color={COLORS.WARM_TEXT} />
+        </TouchableOpacity>
       </View>
-    </>
-  )
+
+      {/* Botón iniciar sesión */}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={[styles.sendButton, isLoading && styles.disabledButton]}
+        onPress={() => { if (validCredentials()) userLogin(); }}
+        disabled={isLoading}
+        accessibilityRole="button"
+        accessibilityLabel="Iniciar sesión"
+      >
+        <Text style={styles.buttonText}>
+          {isLoading ? "Cargando..." : "Iniciar sesión"}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 export default function Index() {
@@ -202,123 +161,149 @@ export default function Index() {
     <KeyboardAwareScrollView
       enableOnAndroid
       extraHeight={80}
-      style={{flex: 1, backgroundColor: COLORS.BACKGROUND}}
+      style={{ flex: 1, backgroundColor: COLORS.FOREST_DARK }}
+      contentContainerStyle={{ flexGrow: 1 }}
     >
-      <SafeAreaView style={styles.loginContainer}>
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View style={styles.subContainer}>
-            <Title />
-            <Login />
+      <SafeAreaView style={{ flex: 1 }}>
+        {/* Zona superior oscura */}
+        <View style={styles.topZone}>
+          <View style={styles.appIcon}>
+            <View style={styles.iconDot} />
           </View>
-        </ScrollView>
+          <View style={styles.titleArea}>
+            <Text style={styles.baseText}>{"FRAP\nRegistro"}</Text>
+            <Text style={styles.subtitle}>Atención prehospitalaria</Text>
+          </View>
+        </View>
+
+        {/* Panel inferior crema */}
+        <View style={styles.bottomPanel}>
+          <Login />
+          <Link href="/signUp" style={styles.linkText}>
+            Crear cuenta nueva
+          </Link>
+        </View>
       </SafeAreaView>
     </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  loginContainer: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: COLORS.BACKGROUND,
-    marginTop: 25
+  topZone: {
+    flex: 1.4,
+    backgroundColor: COLORS.FOREST_DARK,
+    justifyContent: 'space-between',
+    paddingBottom: 24,
   },
 
-  subContainer: {
-    marginTop: 50,
-    alignItems: "center",
-    borderRadius: 20,
-    paddingTop: 20,
-    paddingBottom: 40,
-    paddingHorizontal: 25,
-    backgroundColor: COLORS.BACKGROUND
+  appIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: '#2d5a0e',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 60,
+    marginLeft: 28,
   },
 
-  hospitalIcon: {
-    marginBottom: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    width: icon_size,
-    height: icon_size,
-    borderRadius: icon_size / 2,
-    backgroundColor: COLORS.BACKGROUND,
-    ...Platform.select({
-      ios:     { shadowColor: COLORS.SHADOW, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3 },
-      android: { elevation: 3 },
-    }),
+  iconDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: COLORS.FOREST_LIGHT,
+  },
+
+  titleArea: {
+    paddingLeft: 28,
   },
 
   baseText: {
-    color: COLORS.TEXT_DARK,
-    fontWeight: "bold",
-    fontSize: 35
+    color: COLORS.TEXT_WHITE,
+    fontWeight: '800',
+    fontSize: 48,
+    letterSpacing: -1.5,
+    lineHeight: 52,
+  },
+
+  subtitle: {
+    color: COLORS.FOREST_MUTED,
+    fontSize: 15,
+    fontWeight: '400',
+    marginTop: 8,
+  },
+
+  bottomPanel: {
+    flex: 1,
+    backgroundColor: '#F5F0E8',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 40,
   },
 
   loginCard: {
-    borderRadius: 20,
-    ...Platform.select({
-      ios:     { shadowColor: COLORS.SHADOW_LIGHT, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.2, shadowRadius: 2 },
-      android: { elevation: 2 },
-    }),
-    height: "auto",
-    width: 300,
-    marginTop: 40,
-    paddingVertical: 50,
-    paddingHorizontal: 20
-  },
-
-  sendButton: {
-    backgroundColor: COLORS.SECONDARY,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 200,
-    height: 45,
-    marginTop: 10,
-    ...Platform.select({
-      ios:     { shadowColor: 'rgb(61, 60, 60)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.81, shadowRadius: 3 },
-      android: { elevation: 3 },
-    }),
-  },
-
-  disabledButton: {
-    backgroundColor: COLORS.DISABLED,
-    opacity: 0.7
-  },
-
-  buttonText: {
-    color: COLORS.TEXT_WHITE,
-    fontSize: 20,
-    fontWeight: "bold"
+    width: '100%',
+    gap: 14,
   },
 
   error: {
-    color: COLORS.DANGER,
+    color: '#C0392B',
     fontSize: 12,
-    marginBottom: 5,
-    top: -20,
-    textAlign: "center"
+    textAlign: 'center',
+    marginBottom: 4,
   },
 
   field: {
-    flexDirection: "row",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D3D1C7',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    height: 52,
   },
 
   fieldText: {
-    color: COLORS.TEXT_DARK,
-    fontSize: 19,
-    marginLeft: 10,
-    borderRadius: 10,
     flex: 1,
-    ...Platform.select({
-      ios:     { shadowColor: 'rgb(122, 119, 119)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.73, shadowRadius: 5 },
-      android: { elevation: 3 },
-    }),
-    backgroundColor: COLORS.BACKGROUND,
-    paddingLeft: 10,
-    marginBottom: 10
+    color: COLORS.TEXT,
+    fontSize: 16,
+    fontWeight: '400',
+  },
+
+  eyeButton: {
+    position: 'absolute',
+    right: 14,
+    top: 16,
+  },
+
+  sendButton: {
+    backgroundColor: COLORS.FOREST_MID,
+    borderRadius: 14,
+    paddingVertical: 16,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 6,
+  },
+
+  disabledButton: {
+    opacity: 0.6,
+    backgroundColor: COLORS.DISABLED,
+  },
+
+  buttonText: {
+    color: COLORS.FOREST_SOFT,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+
+  linkText: {
+    color: '#854F0B',
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 24,
   },
 });

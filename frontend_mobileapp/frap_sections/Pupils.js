@@ -34,7 +34,7 @@ function PupilsSection({ data, onUpdate }) {
     };
 
     return (
-        <View style={{ marginRight: 15, marginTop: 30 }}>
+        <View>
             <Text style={styles.title}>Pupilas</Text>
 
             <View style={styles.options}>
@@ -73,71 +73,69 @@ function PupilsSection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
-        marginBottom: 13
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 12,
     },
 
     options: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        marginLeft: 10,
-        rowGap: 20,
-        columnGap: 10
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        rowGap: 10,
+        columnGap: 10,
     },
 
     pupil: {
-        borderRadius: 30,
+        borderRadius: 20,
         backgroundColor: COLORS.BACKGROUND,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 25,
-        minWidth: 140,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        height: 50
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        minWidth: 130,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
+        height: 44,
     },
 
     text: {
-        fontSize: 16,
+        fontSize: 14,
         color: COLORS.TEXT,
-        fontWeight: "600"
+        fontWeight: '500',
     },
 
     buttonPressed: {
-        backgroundColor: COLORS.SELECTED
+        backgroundColor: COLORS.SELECTED,
+        borderColor: COLORS.SELECTED,
     },
 
     textOnPress: {
-        color: COLORS.BACKGROUND
+        color: COLORS.BACKGROUND,
     },
 
     selectedContainer: {
-        backgroundColor: COLORS.SURFACE_BLUE,
-        padding: 15,
+        backgroundColor: COLORS.SURFACE_ALT,
+        padding: 12,
         borderRadius: 10,
-        marginTop: 20,
-        marginLeft: 5,
+        marginTop: 12,
         borderWidth: 1,
-        borderColor: COLORS.BORDER_BLUE
+        borderColor: COLORS.BORDER,
     },
 
     selectedLabel: {
-        fontSize: 14,
-        color: COLORS.TEXT_MUTED,
-        fontWeight: "600",
-        marginBottom: 5
+        fontSize: 12,
+        color: COLORS.WARM_TEXT,
+        fontWeight: '500',
+        marginBottom: 4,
     },
 
     selectedText: {
-        fontSize: 16,
+        fontSize: 14,
         color: COLORS.TEXT,
-        fontStyle: "italic"
-    }
+        fontStyle: 'italic',
+    },
 });
 
 export default React.memo(PupilsSection);

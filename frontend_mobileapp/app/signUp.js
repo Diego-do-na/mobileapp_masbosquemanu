@@ -1,7 +1,7 @@
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert, Platform } from "react-native";
+import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ import API_URL from "../config";
 import { useAuth } from "../context/AuthContext";
 import { COLORS } from "../constants/colors";
 
-export default function SignUp(){
+export default function SignUp() {
     const [nombre,        setNombre]        = useState('');
     const [usuario,       setUsuario]       = useState('');
     const [correoEscolar, setCorreoEscolar] = useState('');
@@ -22,19 +22,19 @@ export default function SignUp(){
     const { login } = useAuth();
 
     const sections = [
-        {type: "Nombre Completo",       setter: setNombre},
-        {type: "Correo Escolar",         setter: setCorreoEscolar},
-        {type: "Correo Institucional",   setter: setCorreoInst},
-        {type: "Usuario",                setter: setUsuario},
-        {type: "Contraseña",             setter: setContrasena}
+        { type: "Nombre Completo",      setter: setNombre,        value: nombre        },
+        { type: "Correo Escolar",        setter: setCorreoEscolar, value: correoEscolar },
+        { type: "Correo Institucional",  setter: setCorreoInst,    value: correoInst    },
+        { type: "Usuario",               setter: setUsuario,       value: usuario       },
+        { type: "Contraseña",            setter: setContrasena,    value: contrasena    },
     ];
 
-    async function signUpParamedic(){
+    async function signUpParamedic() {
         if (isLoading) return;
 
         setIsLoading(true);
 
-        try{
+        try {
             const response = await fetch(`${API_URL}/api/paramedicos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -75,15 +75,15 @@ export default function SignUp(){
                 }
             }
 
-        } catch (error){
+        } catch (error) {
             console.error("Error en el SignUp: ", error);
             setErrorMessage("*Error de conexion. Verifica tu internet");
         } finally {
             setIsLoading(false);
         }
-    };
+    }
 
-    function validForm(){
+    function validForm() {
         if (!nombre.trim()) {
             setErrorMessage("*Nombre es requerido");
             return false;
@@ -96,7 +96,7 @@ export default function SignUp(){
             setErrorMessage("*Correo Escolar inválido");
             return false;
         }
-        if (usuario.length < 4){
+        if (usuario.length < 4) {
             setErrorMessage("*Usuario debe tener al menos 4 caracteres");
             return false;
         }
@@ -108,11 +108,11 @@ export default function SignUp(){
             setErrorMessage("*Contraseña debe tener al menos 8 caracteres");
             return false;
         }
-        if (!/\d/.test(contrasena)){
+        if (!/\d/.test(contrasena)) {
             setErrorMessage("*Contraseña debe contener al menos un numero");
             return false;
         }
-        if (!/[A-Z]/.test(contrasena)){
+        if (!/[A-Z]/.test(contrasena)) {
             setErrorMessage("*Contraseña debe contener al menos una mayuscula");
             return false;
         }
@@ -123,151 +123,195 @@ export default function SignUp(){
         <KeyboardAwareScrollView
             enableOnAndroid
             extraHeight={200}
-            style={{flex: 1, backgroundColor: COLORS.BACKGROUND}}
+            style={{ flex: 1, backgroundColor: COLORS.FOREST_DARK }}
+            contentContainerStyle={{ flexGrow: 1 }}
         >
-        <SafeAreaView style={styles.screen}>
-            <View style={styles.signUpContainer}>
-                <FontAwesome
-                    name="user-circle"
-                    size={100}
-                    color={COLORS.SIGNUP_ACCENT}
-                    style={{marginBottom: 30}}
-                />
-
-                {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
-
-                {sections.map((section, index) => {
-                    return (
-                        <View style={styles.inputContainer} key={index}>
-                            <View style={{flexDirection: "row", gap: 2}}>
-                                <Text style={{color: COLORS.DANGER}}>
-                                    {section.type === "Correo Escolar" ? "" : "*"}
-                                </Text>
-                                <Text style={styles.text}>{section.type}</Text>
-                            </View>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(newInput) => {
-                                    section.setter(newInput);
-                                    setErrorMessage('');
-                                }}
-                                value={
-                                    section.type === "Nombre Completo"     ? nombre :
-                                    section.type === "Correo Escolar"       ? correoEscolar :
-                                    section.type === "Correo Institucional" ? correoInst :
-                                    section.type === "Usuario"              ? usuario : contrasena
-                                }
-                                secureTextEntry={section.type === "Contraseña" && !visiblePwd}
-                                editable={!isLoading}
-                            />
-                            {section.type === "Contraseña" && (
-                                <TouchableOpacity
-                                    onPress={() => setVisiblePwd(!visiblePwd)}
-                                    style={{position: "absolute", top: 38, right: 15}}
-                                >
-                                    <AntDesign
-                                        name={visiblePwd ? "eye-invisible" : "eye"}
-                                        size={25}
-                                        color="gray"
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    )
-                })}
-
-                <TouchableOpacity
-                    style={[styles.sendButton, isLoading && styles.disabledButton]}
-                    onPress={() => {
-                        if (validForm()){
-                            setErrorMessage("");
-                            signUpParamedic();
-                        }
-                    }}
-                    disabled={isLoading}
-                >
-                    <Text style={{fontSize: 23, color: COLORS.BACKGROUND}}>
-                        {isLoading ? "Registrando..." : "Registrarme"}
-                    </Text>
-                </TouchableOpacity>
-
-                <View style={{flexDirection: "row", marginTop: 20}}>
-                    <Text>¿Ya tienes cuenta? </Text>
-                    <Link href="/" style={{color: COLORS.SECONDARY}}>Iniciar Sesion</Link>
+            <SafeAreaView style={{ flex: 1 }}>
+                {/* Zona superior oscura */}
+                <View style={styles.topZone}>
+                    <View style={styles.appIcon}>
+                        <View style={styles.iconDot} />
+                    </View>
+                    <View style={styles.titleArea}>
+                        <Text style={styles.title}>{"Crear\ncuenta"}</Text>
+                        <Text style={styles.subtitle}>Regístrate para continuar</Text>
+                    </View>
                 </View>
-            </View>
-        </SafeAreaView>
-       </KeyboardAwareScrollView>
+
+                {/* Panel inferior crema */}
+                <View style={styles.bottomPanel}>
+                    {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+
+                    {sections.map((section, index) => (
+                        <View style={styles.inputContainer} key={index}>
+                            <View style={styles.field}>
+                                <TextInput
+                                    style={[styles.input, section.type === "Contraseña" && { paddingRight: 46 }]}
+                                    placeholder={section.type}
+                                    placeholderTextColor="#B4B2A9"
+                                    onChangeText={(v) => { section.setter(v); setErrorMessage(''); }}
+                                    value={section.value}
+                                    secureTextEntry={section.type === "Contraseña" && !visiblePwd}
+                                    editable={!isLoading}
+                                    autoCapitalize={section.type === "Nombre Completo" ? "words" : "none"}
+                                    keyboardType={
+                                        section.type === "Correo Escolar" || section.type === "Correo Institucional"
+                                            ? "email-address" : "default"
+                                    }
+                                />
+                                {section.type === "Contraseña" && (
+                                    <TouchableOpacity
+                                        onPress={() => setVisiblePwd(!visiblePwd)}
+                                        style={styles.eyeButton}
+                                        accessibilityRole="button"
+                                        accessibilityLabel={visiblePwd ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                    >
+                                        <AntDesign
+                                            name={visiblePwd ? "eye-invisible" : "eye"}
+                                            size={20}
+                                            color={COLORS.WARM_TEXT}
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                            </View>
+                        </View>
+                    ))}
+
+                    <TouchableOpacity
+                        style={[styles.sendButton, isLoading && styles.disabledButton]}
+                        onPress={() => { if (validForm()) { setErrorMessage(""); signUpParamedic(); } }}
+                        disabled={isLoading}
+                        accessibilityRole="button"
+                        accessibilityLabel="Registrarse"
+                    >
+                        <Text style={styles.buttonText}>
+                            {isLoading ? "Registrando..." : "Registrarme"}
+                        </Text>
+                    </TouchableOpacity>
+
+                    <Link href="/" style={styles.linkText}>
+                        Ya tengo cuenta
+                    </Link>
+                </View>
+            </SafeAreaView>
+        </KeyboardAwareScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    screen: {
+    topZone: {
         flex: 1,
-        alignItems: "center",
-        paddingHorizontal: 30,
-        paddingTop: 20
+        backgroundColor: COLORS.FOREST_DARK,
+        justifyContent: 'space-between',
+        paddingBottom: 24,
+        minHeight: 200,
     },
 
-    signUpContainer: {
-        borderRadius: 20,
-        backgroundColor: COLORS.CONTAINER_BG,
-        alignItems: "center",
-        padding: 20,
-        width: "100%",
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3 },
-            android: { elevation: 3 },
-        }),
-        paddingTop: 30
+    appIcon: {
+        width: 56,
+        height: 56,
+        borderRadius: 16,
+        backgroundColor: '#2d5a0e',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 60,
+        marginLeft: 28,
     },
 
-    input: {
-        backgroundColor: COLORS.INPUT_BG,
-        borderRadius: 15,
-        marginTop: 5,
-        height: 42,
-        paddingHorizontal: 20,
+    iconDot: {
+        width: 22,
+        height: 22,
+        borderRadius: 11,
+        backgroundColor: COLORS.FOREST_LIGHT,
+    },
+
+    titleArea: {
+        paddingLeft: 28,
+    },
+
+    title: {
+        color: COLORS.TEXT_WHITE,
+        fontWeight: '800',
+        fontSize: 48,
+        letterSpacing: -1.5,
+        lineHeight: 52,
+    },
+
+    subtitle: {
+        color: COLORS.FOREST_MUTED,
         fontSize: 15,
-        borderColor: "rgba(0, 0, 0, 0.14)",
-        borderWidth: 0.8,
-        paddingRight: 50
+        fontWeight: '400',
+        marginTop: 8,
     },
 
-    text: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: COLORS.TEXT_BLACK + 'b6'
-    },
-
-    inputContainer: {
-        alignSelf: "flex-start",
-        width: "100%",
-        marginBottom: 15
-    },
-
-    sendButton: {
-        borderRadius: 20,
-        backgroundColor: COLORS.SIGNUP_BUTTON,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        marginTop: 10,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 3 },
-            android: { elevation: 3 },
-        }),
-    },
-
-    disabledButton: {
-        opacity: 0.7,
-        backgroundColor: COLORS.TEXT_MUTED
+    bottomPanel: {
+        backgroundColor: '#F5F0E8',
+        borderTopLeftRadius: 32,
+        borderTopRightRadius: 32,
+        paddingHorizontal: 24,
+        paddingTop: 32,
+        paddingBottom: 40,
     },
 
     error: {
-        color: COLORS.DANGER,
+        color: '#C0392B',
         fontSize: 12,
-        marginBottom: 5,
-        top: -20,
-        textAlign: "center"
+        marginBottom: 12,
+        textAlign: 'center',
+    },
+
+    inputContainer: {
+        width: '100%',
+        marginBottom: 14,
+    },
+
+    field: {
+        position: 'relative',
+    },
+
+    input: {
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#D3D1C7',
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        fontSize: 15,
+        color: COLORS.TEXT,
+        height: 52,
+    },
+
+    eyeButton: {
+        position: 'absolute',
+        right: 14,
+        top: 16,
+    },
+
+    sendButton: {
+        backgroundColor: COLORS.FOREST_MID,
+        borderRadius: 14,
+        paddingVertical: 16,
+        paddingHorizontal: 20,
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 20,
+    },
+
+    disabledButton: {
+        opacity: 0.6,
+        backgroundColor: COLORS.DISABLED,
+    },
+
+    buttonText: {
+        color: COLORS.FOREST_SOFT,
+        fontSize: 17,
+        fontWeight: '700',
+    },
+
+    linkText: {
+        color: '#854F0B',
+        fontSize: 15,
+        textAlign: 'center',
     },
 });

@@ -17,8 +17,8 @@ function SaveButton({ onSave, isOffline, isSaving, pendingCount, onManualSync })
                 >
                     <FontAwesome5
                         name="sync"
-                        size={20}
-                        color={COLORS.BACKGROUND}
+                        size={16}
+                        color={COLORS.STATUS_SYNC_TEXT}
                     />
                     <Text style={styles.syncText}>
                         {isOffline ? 'Sincronizar' : `Pendientes: ${pendingCount}`}
@@ -68,77 +68,73 @@ function SaveButton({ onSave, isOffline, isSaving, pendingCount, onManualSync })
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: "center",
-        marginTop: 40,
-        marginBottom: 60,
-        paddingRight: 20,
-        paddingLeft: 10
+        alignItems: 'center',
+        marginTop: 8,
+        marginBottom: 20,
+        paddingHorizontal: 12,
     },
 
     saveButton: {
-        backgroundColor: COLORS.SAVE_BUTTON,
-        borderRadius: 20,
-        alignItems: "center",
-        flexDirection: "row",
-        gap: 15,
-        paddingHorizontal: 30,
-        //borderColor: "#2c4e24",
-        //borderWidth: 3,
-        paddingVertical: 15,
-        width: "100%",
-        justifyContent: "center",
-        ...Platform.select({
-            ios:     { shadowColor: 'rgb(75, 72, 72)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
+        backgroundColor: COLORS.FOREST_MID,
+        borderRadius: 14,
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 12,
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        width: '100%',
+        justifyContent: 'center',
     },
 
     offlineButton: {
-        backgroundColor: COLORS.DANGER
+        backgroundColor: COLORS.DANGER,
     },
 
     disabledButton: {
-        opacity: 0.7
+        opacity: 0.7,
+        backgroundColor: COLORS.BORDER,
     },
 
     saveText: {
-        fontSize: 20,
-        color: COLORS.BACKGROUND,
-        fontWeight: "bold"
+        fontSize: 17,
+        color: COLORS.FOREST_SOFT,
+        fontWeight: '700',
     },
 
     syncButton: {
-        backgroundColor: COLORS.INFO,
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 10,
-        paddingHorizontal: 20,
+        backgroundColor: COLORS.STATUS_SYNC_BG,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingHorizontal: 16,
         paddingVertical: 10,
-        borderRadius: 15,
-        marginBottom: 15,
-        alignSelf: "flex-start"
+        borderRadius: 20,
+        marginBottom: 12,
+        alignSelf: 'flex-start',
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     syncText: {
-        color: COLORS.BACKGROUND,
-        fontSize: 14,
-        fontWeight: "600"
+        color: COLORS.STATUS_SYNC_TEXT,
+        fontSize: 13,
+        fontWeight: '700',
     },
 
     statusInfo: {
-        marginTop: 15,
+        marginTop: 10,
         padding: 10,
         backgroundColor: COLORS.SURFACE,
         borderRadius: 10,
-        width: "100%"
+        width: '100%',
     },
 
     offlineInfo: {
-        color: COLORS.DANGER,
+        color: COLORS.CAFFE_DARK,
         fontSize: 12,
-        textAlign: "center",
-        fontStyle: "italic"
-    }
+        textAlign: 'center',
+        fontStyle: 'italic',
+    },
 });
 
 export default React.memo(SaveButton);

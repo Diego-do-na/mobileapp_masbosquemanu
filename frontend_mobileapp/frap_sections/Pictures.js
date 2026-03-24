@@ -175,7 +175,7 @@ function PicturesSection({ data, onUpdate }) {
     };
 
     return (
-        <View style={{ marginRight: 15, marginTop: 30 }}>
+        <View>
             <Text style={styles.title}>Fotos de Lesiones</Text>
 
             <View style={styles.mainContainer}>
@@ -281,81 +281,77 @@ function PicturesSection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
-        marginBottom: 13
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 12,
     },
 
     mainContainer: {
-        gap: 15,
-        borderRadius: 20,
+        gap: 12,
+        borderRadius: 10,
         backgroundColor: COLORS.BACKGROUND,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     buttonsRow: {
-        flexDirection: "row",
-        gap: 15,
-        marginBottom: 10
+        flexDirection: 'row',
+        gap: 10,
+        marginBottom: 4,
     },
 
     buttons: {
-        borderRadius: 13,
+        borderRadius: 10,
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        gap: 10,
-        paddingVertical: 12,
-        /*shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-        */
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: 8,
+        paddingVertical: 11,
     },
 
     cameraButton: {
-        backgroundColor: COLORS.CAMERA_BUTTON,
-        borderWidth: 1
+        backgroundColor: COLORS.FOREST_MID,
+        borderWidth: 1,
+        borderColor: COLORS.FOREST_MID,
     },
 
     galleryButton: {
-        backgroundColor: COLORS.BACKGROUND,
+        backgroundColor: COLORS.FOREST_SOFT,
         borderWidth: 1,
-        borderColor: COLORS.PRIMARY_DARK
+        borderColor: COLORS.BORDER,
     },
 
     buttonText: {
-        fontSize: 16,
-        fontWeight: "bold"
+        fontSize: 14,
+        fontWeight: '700',
+        color: COLORS.TEXT_WHITE,
     },
 
     galleryButtonText: {
-        color: COLORS.PRIMARY_DARK
+        color: COLORS.FOREST_MID,
     },
 
     emptyContainer: {
         gap: 10,
-        justifyContent: "center",
+        justifyContent: 'center',
         padding: 20,
-        height: 150,
-        alignItems: "center",
-        borderRadius: 15,
-        width: "100%",
-        alignSelf: "center",
-        backgroundColor: COLORS.SURFACE
+        height: 120,
+        alignItems: 'center',
+        borderRadius: 10,
+        width: '100%',
+        alignSelf: 'center',
+        backgroundColor: COLORS.SURFACE,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     emptyText: {
-        color: "gray",
-        fontSize: 16
+        color: COLORS.WARM_TEXT,
+        fontSize: 14,
     },
 
     scrollContainer: {

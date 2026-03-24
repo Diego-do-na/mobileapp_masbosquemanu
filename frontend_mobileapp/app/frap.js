@@ -1,5 +1,7 @@
-import { StyleSheet, Text, ScrollView, View, Alert } from "react-native";
+import { StyleSheet, Text, ScrollView, View, Alert, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../constants/colors";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigation, usePreventRemove } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -159,29 +161,36 @@ const checkRealConnectivity = async () => {
 // HEADER COMPONENTE
 // ---------------------------------------------------------------------------
 function Header({ isOffline, pendingCount }) {
-    if (!isOffline && pendingCount === 0) return null;
     return (
         <View style={styles.header}>
-            <View style={styles.headerContent}>
-                <Text style={styles.headerText}>Registro de Atención Prehospitalaria</Text>
-                <View style={styles.statusContainer}>
-                    {isOffline && (
-                        <View style={styles.offlineBadge}>
-                            <Text style={styles.offlineText}>OFFLINE</Text>
-                            {pendingCount > 0 && (
-                                <View style={styles.pendingBadge}>
-                                    <Text style={styles.pendingText}>{pendingCount}</Text>
-                                </View>
-                            )}
-                        </View>
-                    )}
-                    {!isOffline && pendingCount > 0 && (
-                        <View style={[styles.offlineBadge, {backgroundColor: '#f39c12'}]}>
-                            <Text style={styles.offlineText}>{pendingCount} pendientes</Text>
-                        </View>
-                    )}
+            <TouchableOpacity
+                onPress={() => router.back()}
+                style={styles.backButton}
+                accessibilityRole="button"
+                accessibilityLabel="Volver atrás"
+            >
+                <Ionicons name="arrow-back" size={20} color={COLORS.FOREST_MID} />
+            </TouchableOpacity>
+
+            <Text style={styles.headerText}>{"Nuevo\nFRAP"}</Text>
+
+            {(isOffline || pendingCount > 0) ? (
+                <View style={[
+                    styles.headerBadge,
+                    { backgroundColor: isOffline ? COLORS.STATUS_PEND_BG : COLORS.STATUS_SYNC_BG }
+                ]}>
+                    <Text style={[
+                        styles.headerBadgeText,
+                        { color: isOffline ? COLORS.STATUS_PEND_TEXT : COLORS.STATUS_SYNC_TEXT }
+                    ]}>
+                        {isOffline ? 'Offline' : `${pendingCount} pend.`}
+                    </Text>
                 </View>
-            </View>
+            ) : (
+                <View style={[styles.headerBadge, { backgroundColor: COLORS.STATUS_SENT_BG }]}>
+                    <Text style={[styles.headerBadgeText, { color: COLORS.STATUS_SENT_TEXT }]}>Activo</Text>
+                </View>
+            )}
         </View>
     );
 }
@@ -766,46 +775,72 @@ export default function Frap() {
         <SafeAreaView style={styles.frapContainer}>
             <Header isOffline={isOffline} pendingCount={pendingReportsCount} />
 
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <General    data={reportData}  onUpdate={updateReportData} />
-                <Patient    data={patientData} onUpdate={updatePatientData} />
-                <Vitals
-                    data={reportData.signos_vitales}
-                    onUpdate={(newVitals) => updateReportData({
-                        signos_vitales: { ...reportData.signos_vitales, ...newVitals }
-                    })}
-                    onValidationChange={setVitalsValid}
-                />
-                <ESCGW
-                    data={reportData.nivel_conciencia}
-                    onUpdate={(newGlasgow) => updateReportData({
-                        nivel_conciencia: { ...reportData.nivel_conciencia, ...newGlasgow }
-                    })}
-                />
-                <Pupils      data={reportData.pupilas}    onUpdate={handlePupilsUpdate} />
-                <Injury      data={reportData.lesiones}   onUpdate={handleInjuriesUpdate} />
-                <AnatomicId  data={reportData.anatomicas} onUpdate={handleAnatomicasUpdate} />
-                <Supplies    data={reportData.insumos}    onUpdate={(insumos) => updateReportData({ insumos })} />
-                <Notes
-                    observaciones={reportData.observaciones}
-                    recomendaciones={reportData.recomendaciones}
-                    onUpdate={(updates) => updateReportData(updates)}
-                />
-                <Pictures   data={reportData.fotografias} onUpdate={(fotografias) => updateReportData({ fotografias })} />
-                <Signature  data={reportData.firma_paciente} onUpdate={(firma_paciente) => updateReportData({ firma_paciente })} />
-                <Witness
-                    data={{ nombre_testigo: reportData.nombre_testigo, firma_testigo: reportData.firma_testigo }}
-                    onUpdate={(updates) => updateReportData(updates)}
-                />
-                <Transport
-                    data={{
-                        traslado_aceptado: reportData.traslado_aceptado,
-                        numero_unidad:     reportData.numero_unidad,
-                        nombre_operador:   reportData.nombre_operador,
-                        firma_operador:    reportData.firma_operador
-                    }}
-                    onUpdate={(updates) => updateReportData(updates)}
-                />
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+                <View style={styles.sectionCard}>
+                    <General data={reportData} onUpdate={updateReportData} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Patient data={patientData} onUpdate={updatePatientData} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Vitals
+                        data={reportData.signos_vitales}
+                        onUpdate={(newVitals) => updateReportData({
+                            signos_vitales: { ...reportData.signos_vitales, ...newVitals }
+                        })}
+                        onValidationChange={setVitalsValid}
+                    />
+                </View>
+                <View style={styles.sectionCard}>
+                    <ESCGW
+                        data={reportData.nivel_conciencia}
+                        onUpdate={(newGlasgow) => updateReportData({
+                            nivel_conciencia: { ...reportData.nivel_conciencia, ...newGlasgow }
+                        })}
+                    />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Pupils data={reportData.pupilas} onUpdate={handlePupilsUpdate} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Injury data={reportData.lesiones} onUpdate={handleInjuriesUpdate} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <AnatomicId data={reportData.anatomicas} onUpdate={handleAnatomicasUpdate} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Supplies data={reportData.insumos} onUpdate={(insumos) => updateReportData({ insumos })} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Notes
+                        observaciones={reportData.observaciones}
+                        recomendaciones={reportData.recomendaciones}
+                        onUpdate={(updates) => updateReportData(updates)}
+                    />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Pictures data={reportData.fotografias} onUpdate={(fotografias) => updateReportData({ fotografias })} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Signature data={reportData.firma_paciente} onUpdate={(firma_paciente) => updateReportData({ firma_paciente })} />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Witness
+                        data={{ nombre_testigo: reportData.nombre_testigo, firma_testigo: reportData.firma_testigo }}
+                        onUpdate={(updates) => updateReportData(updates)}
+                    />
+                </View>
+                <View style={styles.sectionCard}>
+                    <Transport
+                        data={{
+                            traslado_aceptado: reportData.traslado_aceptado,
+                            numero_unidad:     reportData.numero_unidad,
+                            nombre_operador:   reportData.nombre_operador,
+                            firma_operador:    reportData.firma_operador
+                        }}
+                        onUpdate={(updates) => updateReportData(updates)}
+                    />
+                </View>
                 <SaveButton
                     onSave={handleSaveReport}
                     isOffline={isOffline}
@@ -824,55 +859,60 @@ export default function Frap() {
 const styles = StyleSheet.create({
     frapContainer: {
         flex: 1,
-        paddingLeft: 20,
-        paddingBottom: 10,
-        paddingTop: 20,
-        backgroundColor: "#40b67127"
+        backgroundColor: COLORS.BACKGROUND,
     },
 
+    scrollContent: {
+        paddingHorizontal: 12,
+        paddingBottom: 20,
+        gap: 10,
+    },
+
+    // ── Header ──
     header: {
-        backgroundColor: "#165057",
-        borderRadius: 20,
-        marginBottom: 15,
-        marginRight: 20,
-        padding: 10
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        backgroundColor: COLORS.BACKGROUND,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.BORDER,
+        gap: 12,
     },
 
-    headerContent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+    backButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 10,
+        backgroundColor: COLORS.FOREST_SOFT,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
     headerText: {
-        fontSize: 18,
-        color: "white",
-        fontWeight: "bold",
-        flex: 1
+        flex: 1,
+        fontSize: 22,
+        fontWeight: '800',
+        color: COLORS.FOREST_DARK,
+        letterSpacing: -0.5,
+        lineHeight: 26,
     },
 
-    statusContainer: { marginLeft: 10 },
-
-    offlineBadge: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#ff6b6b',
-        paddingHorizontal: 8,
+    headerBadge: {
+        paddingHorizontal: 10,
         paddingVertical: 4,
-        borderRadius: 12,
-        gap: 6
+        borderRadius: 8,
     },
 
-    offlineText:  { color: 'white', fontSize: 12, fontWeight: 'bold' },
-
-    pendingBadge: {
-        backgroundColor: 'white',
-        borderRadius: 10,
-        minWidth: 20,
-        height: 20,
-        justifyContent: 'center',
-        alignItems: 'center'
+    headerBadgeText: {
+        fontSize: 11,
+        fontWeight: '700',
     },
 
-    pendingText: { color: '#ff6b6b', fontSize: 10, fontWeight: 'bold' }
+    // ── Tarjeta de sección ──
+    sectionCard: {
+        backgroundColor: COLORS.SURFACE,
+        borderRadius: 16,
+        padding: 16,
+    },
 });

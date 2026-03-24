@@ -33,14 +33,14 @@ function PatientSection({ data, onUpdate }) {
             <Text style={styles.title}>Datos del Paciente</Text>
 
             <TextInput
-                placeholder="Nombre Completo: "
-                style={[styles.general, { flex: 1 }]}
+                placeholder="Nombre Completo"
+                style={styles.general}
                 value={data.nombre}
                 onChangeText={(newNombre) => handleChange('nombre', newNombre)}
                 accessibilityLabel="Nombre completo del paciente"
             />
 
-            <View style={{ flexDirection: "row", gap: 10 }}>
+            <View style={{ flexDirection: 'row', gap: 10, marginTop: 0 }}>
                 <TextInput
                     placeholder="Edad"
                     style={[styles.general, { flex: 1 }]}
@@ -51,7 +51,7 @@ function PatientSection({ data, onUpdate }) {
                 />
                 <TouchableOpacity
                     onPress={() => setShowGeneros(!showGeneros)}
-                    style={[styles.general, { flex: 2, height: "auto" }]}
+                    style={[styles.general, { flex: 2, height: 'auto', paddingVertical: 14 }]}
                     accessibilityRole="button"
                     accessibilityLabel="Seleccionar género del paciente"
                 >
@@ -93,7 +93,7 @@ function PatientSection({ data, onUpdate }) {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ marginRight: 15, marginLeft: 5, marginBottom: 30 }}>
+            <View style={{ marginTop: 8 }}>
                 {/* Alergias */}
                 <View style={styles.wrapper}>
                     <View style={styles.label}>
@@ -159,104 +159,94 @@ function PatientSection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "700",
-        color: COLORS.TEXT,
-        marginRight: 15,
-        marginTop: 50
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 10,
     },
 
     general: {
-        height: 60,
-        padding: 15,
+        height: 52,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
         backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 15,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        marginLeft: 5,
-        fontSize: 20,
-        fontWeight: "500",
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
+        fontSize: 15,
+        fontWeight: '400',
         color: COLORS.TEXT,
-        marginRight: 15,
-        marginTop: 20
+        marginTop: 8,
     },
 
     optionals: {
-        padding: 15,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
         backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 15,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        fontSize: 19,
-        fontWeight: "500",
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
+        fontSize: 15,
+        fontWeight: '400',
         color: COLORS.TEXT,
-        minHeight: 70,
-        marginTop: 5
+        minHeight: 60,
+        marginTop: 4,
     },
 
     wrapper: {
-        marginTop: 10
+        marginTop: 10,
     },
 
     headerDropDown: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         flex: 1,
-        alignItems: "center"
+        alignItems: 'center',
     },
 
     dropDown: {
         marginTop: 10,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
 
     genders: {
         color: COLORS.TEXT,
-        fontSize: 18,
-        fontWeight: "500"
+        fontSize: 15,
+        fontWeight: '400',
     },
 
     text: {
-        fontSize: 20,
-        color: "#535f64e8",
-        fontWeight: "500"
+        fontSize: 15,
+        color: COLORS.TEXT_LABEL,
+        fontWeight: '400',
     },
 
     arrayLabel: {
-        fontSize: 16,
-        color: COLORS.TEXT_MUTED,
-        marginBottom: 8,
-        fontWeight: "600"
+        fontSize: 12,
+        color: COLORS.WARM_TEXT,
+        marginBottom: 4,
+        fontWeight: '500',
     },
 
     arrayPreview: {
-        backgroundColor: COLORS.SURFACE_BLUE,
+        backgroundColor: COLORS.SURFACE_ALT,
         padding: 10,
         borderRadius: 10,
         marginTop: 8,
         borderWidth: 1,
-        borderColor: COLORS.BORDER_BLUE
+        borderColor: COLORS.BORDER,
     },
 
     arrayPreviewText: {
-        fontSize: 14,
+        fontSize: 13,
         color: COLORS.TEXT,
-        fontStyle: "italic"
+        fontStyle: 'italic',
     },
 
     label: {
-        backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 10,
-        bottom: -20,
-        zIndex: 2,
-        width: 150,
-        left: 13,
-        paddingLeft: 15
-    }
+        marginBottom: 4,
+    },
 });
 
 export default React.memo(PatientSection);

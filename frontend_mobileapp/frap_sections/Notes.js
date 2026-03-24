@@ -16,18 +16,16 @@ function NotesSection({ observaciones, recomendaciones, onUpdate }) {
     };
 
     return (
-        <View style={{ marginTop: 50, marginRight: 15, marginBottom: 20 }}>
+        <View>
             <Text style={styles.title}>Notas</Text>
 
             <View style={styles.wrapper}>
-                <View style={styles.topLabel}>
-                    <Text style={styles.label}>Observaciones</Text>
-                </View>
+                <Text style={styles.label}>Observaciones</Text>
                 <TextInput
                     multiline
                     textAlignVertical="top"
-                    style={[styles.containers, { flex: 1 }]}
-                    placeholder="Describa las observaciones ..."
+                    style={styles.containers}
+                    placeholder="Describa las observaciones..."
                     value={observaciones}
                     onChangeText={handleObservacionesChange}
                     onContentSizeChange={(event) => {
@@ -37,14 +35,12 @@ function NotesSection({ observaciones, recomendaciones, onUpdate }) {
                 />
             </View>
 
-            <View style={[styles.wrapper, { height: 80 }]}>
-                <View style={styles.topLabel}>
-                    <Text style={styles.label}>Recomendaciones</Text>
-                </View>
+            <View style={styles.wrapper}>
+                <Text style={styles.label}>Recomendaciones</Text>
                 <TextInput
                     multiline
                     textAlignVertical="top"
-                    style={[styles.containers, { flex: 1 }]}
+                    style={styles.containers}
                     placeholder="Describa las recomendaciones..."
                     value={recomendaciones}
                     onChangeText={handleRecomendacionesChange}
@@ -60,48 +56,36 @@ function NotesSection({ observaciones, recomendaciones, onUpdate }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 12,
     },
 
     wrapper: {
-        marginLeft: 5,
-        marginBottom: 50,
-        height: 80
+        marginBottom: 14,
     },
 
     containers: {
-        padding: 15,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
         backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 15,
-        ...Platform.select({
-            ios:     { shadowColor: COLORS.SHADOW_WARM, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5 },
-            android: { elevation: 4 },
-        }),
-        fontSize: 18,
-        fontWeight: "500",
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
+        fontSize: 15,
+        fontWeight: '400',
         color: COLORS.TEXT,
-        minHeight: 100
+        minHeight: 90,
     },
 
     label: {
-        fontSize: 16,
-        color: COLORS.TEXT_MUTED,
-        marginBottom: 8,
-        fontWeight: "600",
-        marginLeft: 5
+        fontSize: 12,
+        color: COLORS.WARM_TEXT,
+        marginBottom: 6,
+        fontWeight: '500',
     },
-
-    topLabel: {
-        backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 10,
-        bottom: -20,
-        zIndex: 2,
-        width: 170,
-        left: 13,
-        paddingLeft: 5
-    }
 });
 
 export default React.memo(NotesSection);

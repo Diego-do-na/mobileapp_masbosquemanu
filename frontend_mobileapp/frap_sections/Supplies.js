@@ -168,8 +168,8 @@ function SuppliesSection({ data, onUpdate }) {
                 >
                     <FontAwesome5
                         name={showAllOptions ? "chevron-up" : "chevron-down"}
-                        size={16}
-                        color="#434443d3"
+                        size={14}
+                        color={COLORS.ICON_DARK}
                     />
                     <Text style={styles.botonToggleTexto}>
                         {showAllOptions ? "Ocultar opciones" : "Ver todos los insumos"}
@@ -306,24 +306,20 @@ function SuppliesSection({ data, onUpdate }) {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 10,
-        marginRight: 15,
-        marginLeft: 5,
-        padding: 20,
+        marginTop: 8,
+        padding: 14,
         backgroundColor: COLORS.BACKGROUND,
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: COLORS.BORDER,
     },
 
     title: {
-        fontSize: 30,
-        fontWeight: "600",
-        color: COLORS.TEXT,
-        marginTop: 50
+        fontSize: 18,
+        fontWeight: '700',
+        color: COLORS.TEXT_DARK,
+        letterSpacing: -0.3,
+        marginBottom: 6,
     },
 
     customSection: {
@@ -389,15 +385,15 @@ const styles = StyleSheet.create({
 
   botonToggleTexto: {
     marginLeft: 8,
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#696b69',
+    fontSize: 14,
+    fontWeight: '500',
+    color: COLORS.TEXT,
   },
   subtitulo: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: COLORS.TEXT_MEDIUM,
-    marginBottom: 10,
+    fontSize: 13,
+    fontWeight: '500',
+    color: COLORS.WARM_TEXT,
+    marginBottom: 8,
   },
   listaSeleccionados: {
     minHeight: 80,
